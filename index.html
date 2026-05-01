@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>INFIT - Retos VIP México | Tu Mejor Versión</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Oswald:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: '#D4AF37',
+                        'gold-light': '#F3E5AB',
+                        'gold-dark': '#AA8C2C',
+                        black: '#0A0A0A',
+                        'black-light': '#1A1A1A'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        heading: ['Oswald', 'sans-serif'],
+                    },
+                    animation: {
+                        'pulse-gold': 'pulseGold 2s infinite',
+                        'fade-in': 'fadeIn 0.3s ease-out',
+                        'glow': 'glow 2s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        pulseGold: {
+                            '0%, 100%': { boxShadow: '0 0 10px #D4AF37' },
+                            '50%': { boxShadow: '0 0 25px #D4AF37' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(10px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' }
+                        },
+                        glow: {
+                            '0%, 100%': { filter: 'brightness(1)' },
+                            '50%': { filter: 'brightness(1.3)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0A0A0A;
+            color: #ffffff;
+            background-image: radial-gradient(circle at 50% 0%, #1a1a1a 0%, #000000 70%);
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(26, 26, 26, 0.8);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(212, 175, 55, 0.2);
+        }
+        .input-infit {
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            transition: all 0.3s;
+        }
+        .input-infit:focus {
+            border-color: #D4AF37;
+            outline: none;
+            box-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
+        }
+        .btn-gold {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA8C2C 100%);
+            color: black;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+        .btn-gold:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+        }
+        .vs-text {
+            background: linear-gradient(to bottom, #FFF, #D4AF37);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 0 10px rgba(212,175,55,0.8));
+        }
+        .category-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .category-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(212, 175, 55, 0.2);
+        }
+        .category-card.selected {
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+        .punishment-option {
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+        .punishment-option:hover {
+            background: rgba(212, 175, 55, 0.1);
+            border-color: #D4AF37;
+        }
+        .punishment-option.selected {
+            background: rgba(212, 175, 55, 0.15);
+            border-color: #D4AF37;
+        }
+        .fire-icon {
+            animation: pulseGold 1.5s infinite;
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0A0A0A; }
+        ::-webkit-scrollbar-thumb { background: #D4AF37; border-radius: 10px; }
+        .participant-card {
+            transition: all 0.3s ease;
+        }
+        .participant-card:hover {
+            transform: scale(1.02);
+        }
+        .pot-display {
+            background: linear-gradient(135deg, #D4AF37 0%, #FFD700 50%, #D4AF37 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite;
+        }
+        .tipo-card {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .tipo-card:hover {
+            transform: translateY(-3px);
+        }
+        .tipo-card.selected {
+            border-color: #D4AF37;
+            background: rgba(212, 175, 55, 0.1);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased pb-20">
+
+    <header class="pt-6 pb-4 px-6 text-center">
+        <div class="flex items-center justify-center gap-3 mb-2">
+            <div class="w-12 h-12 rounded-full bg-gold/20 border-2 border-gold flex items-center justify-center overflow-hidden">
+                <i class="fas fa-crown text-gold text-xl"></i>
+            </div>
+            <div>
+                <h1 class="font-heading text-3xl md:text-4xl tracking-wider text-white">
+                    IN<span class="text-gold">FIT</span>
+                </h1>
+                <p class="text-gray-400 text-xs tracking-widest uppercase">Tu Mejor Versión</p>
+            </div>
+        </div>
+        <div class="h-0.5 w-24 bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mt-3"></div>
+    </header>
+
+    <main id="app-container" class="max-w-md mx-auto px-4 mt-4">
+    </main>
+
+    <div class="fixed bottom-4 right-4 opacity-30 hover:opacity-100 cursor-pointer transition-opacity z-50" onclick="openAdmin()">
+        <i class="fas fa-cog text-gold text-lg"></i>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- APP STATE ---
+        window.appState = {
+            plan: null,
+            numParticipantes: 2,
+            participantes: [],
+            tipoReto: null, // 'castigo' o 'premio'
+            premio: { cantidad: 0 },
+            castigo: { descripcion: '', categoria: '' },
+            metas: []
+        };
+
+        // --- PRECIOS Y DESCUENTOS ---
+        window.prices = JSON.parse(localStorage.getItem('infit_prices_mx')) || {
+            plan_alimentacion: 600,
+            plan_entrenamiento: 600,
+            combo: 1000,
+            descuento_2: 10,
+            descuento_3: 15,
+            descuento_4: 20
+        };
+
+        window.descuentosPorParticipante = {
+            2: 10,
+            3: 15,
+            4: 20
+        };
+
+        // --- CATEGORÍAS DE CASTIGOS ---
+        window.punishmentCategories = {
+            fitness: {
+                name: "Fitness",
+                icon: "fa-dumbbell",
+                color: "text-green-400",
+                bg: "bg-green-500/10",
+                border: "border-green-500/30",
+                punishments: [
+                    "50 burpees frente al ganador mientras graba",
+                    "Correr 5 km vistiendo playera del ganador",
+                    "100 sentadillas en la plaza",
+                    "Hacer 50 flexiones en el parque",
+                    "Plancha de 3 minutos grabado para redes",
+                    "30 minutos de jumping jacks sin parar"
+                ]
+            },
+            divertido: {
+                name: "Divertido",
+                icon: "fa-face-laugh-beam",
+                color: "text-yellow-400",
+                bg: "bg-yellow-500/10",
+                border: "border-yellow-500/30",
+                punishments: [
+                    "Bailar en TikTok/Reels una canción elegida por el ganador",
+                    "Cocinarle una cena saludable de 3 tiempos al ganador",
+                    "Correr 2 km vestido de superhéroe 🦸",
+                    "Hacer el reto del balde de agua helada y subir video",
+                    "Usar emoji de 🍑 en todas tus respuestas por 1 semana",
+                    "Cantar una canción en el grupo de amigos del ganador"
+                ]
+            },
+            economico: {
+                name: "Económico",
+                icon: "fa-dollar-sign",
+                color: "text-blue-400",
+                bg: "bg-blue-500/10",
+                border: "border-blue-500/30",
+                punishments: [
+                    "Invitar cena saludable Premium al ganador",
+                    "Pagar la suscripción INFIT del próximo mes del ganador",
+                    "Mandar $200 MXN al ganador",
+                    "Comprar ropa deportiva nueva para el ganador",
+                    "Regalar suplementación deportiva al ganador",
+                    "Regalar un mes de gimnasio al ganador"
+                ]
+            },
+            social: {
+                name: "Social",
+                icon: "fa-users",
+                color: "text-purple-400",
+                bg: "bg-purple-500/10",
+                border: "border-purple-500/30",
+                punishments: [
+                    "Escribir una carta pública admirando la disciplina del ganador",
+                    "Lavar el auto del ganador en público",
+                    "Ser el 'asistente personal' del ganador por un día",
+                    "Subir foto agradeciendo al ganador por el reto",
+                    "Organizar una comida saludable para los amigos del ganador",
+                    "Hacer las compras saludables del ganador por 1 semana"
+                ]
+            },
+            extremo: {
+                name: "🔥 Extremo",
+                icon: "fa-fire-flame-curved",
+                color: "text-red-400",
+                bg: "bg-red-500/10",
+                border: "border-red-500/30",
+                punishments: [
+                    "Correr media maratón (21 km) en 1 mes",
+                    "1000 sentadillas en un solo día grabado para redes",
+                    "7 días comiendo solo lo que elija el ganador",
+                    "Subir video diario por 30 días de progreso",
+                    "Donar $500 MXN a una causa elegida por el ganador",
+                    "Mojarse con un balde de agua helada y subir video 🧊"
+                ]
+            },
+            humor: {
+                name: "😂 Humor",
+                icon: "fa-masks-theater",
+                color: "text-pink-400",
+                bg: "bg-pink-500/10",
+                border: "border-pink-500/30",
+                punishments: [
+                    "Si eres hombre: correr 1 km vestido de mujer 👗",
+                    "Si eres mujer: correr 1 km vestida de hombre con bigote falso 🥸",
+                    "Bailar 'Despacito' en la plaza y subir el video",
+                    "Hacer 20 declaraciones de amor al ganador frente a testigos",
+                    "Caminar como modelo por 1 cuadra mientras graban",
+                    "Subir foto vestido de bebé con chupete 🍼"
+                ]
+            }
+        };
+
+        // --- FIREBASE ---
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        
+        async function initFirebase() {
+            try {
+                const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+                if (!firebaseConfigStr) {
+                    console.warn("Entorno local. Firebase no conectado.");
+                    return;
+                }
+                const firebaseConfig = JSON.parse(firebaseConfigStr);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+                const userCredential = await signInAnonymously(auth);
+                currentUser = userCredential.user;
+                console.log("Conectado a Infit Cloud");
+            } catch (error) {
+                console.error("Error inicializando Firebase:", error);
+            }
+        }
+
+        // --- CORE LOGIC ---
+        function calculateGoal(weight, height, plan) {
+            if(!weight || !height) return "Completar 30 días del plan sin fallar (100% Adherencia).";
+            
+            let w = parseFloat(weight);
+            let h = parseFloat(height);
+            
+            const bmi = w / ((h / 100) * (h / 100));
+            
+            if (plan === 'Alimentación') {
+                if (bmi > 25) {
+                    const objetivoPerdida = (w * 0.03).toFixed(1);
+                    return `Bajar ${objetivoPerdida} kg con 100% adherencia al plan nutricional.`;
+                } else if (bmi > 18.5) {
+                    return "Mantener peso ideal con 100% adherencia al plan nutricional.";
+                } else {
+                    const objetivoGanancia = (w * 0.02).toFixed(1);
+                    return `Ganar ${objetivoGanancia} kg con 100% adherencia al plan nutricional.`;
+                }
+            } 
+            else if (plan === 'Entrenamiento') {
+                if (bmi > 25) {
+                    const objetivoPerdida = (w * 0.03).toFixed(1);
+                    return `Bajar ${objetivoPerdida} kg cumpliendo 100% de los entrenamientos.`;
+                } else if (bmi > 18.5) {
+                    return "Tonificar músculos cumpliendo 100% de los entrenamientos.";
+                } else {
+                    return "Ganar masa muscular cumpliendo 100% de los entrenamientos.";
+                }
+            } 
+            else if (plan === 'Combo VIP') {
+                if (bmi > 25) {
+                    const objetivoPerdida = (w * 0.04).toFixed(1);
+                    return `Bajar ${objetivoPerdida} kg con dieta + ejercicio al 100%.`;
+                } else if (bmi > 18.5) {
+                    return "Tonificar y mejorar condición con 100% adherencia total.";
+                } else {
+                    return "Ganar masa muscular con dieta + entrenamiento al 100%.";
+                }
+            }
+            
+            return "Completar 30 días del plan sin fallar (100% Adherencia).";
+        }
+
+        function getAvatarFallbackCanvas(nombre) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 200; 
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+            
+            ctx.fillStyle = '#1A1A1A';
+            ctx.fillRect(0, 0, 200, 200);
+            
+            const initial = nombre ? nombre.charAt(0).toUpperCase() : 'X';
+            ctx.fillStyle = '#D4AF37';
+            ctx.font = 'bold 100px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(initial, 100, 110);
+            
+            return canvas.toDataURL('image/png');
+        }
+
+        window.previewImage = function(input, imgId) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = document.getElementById(imgId);
+                    img.src = e.target.result;
+                    img.classList.remove('hidden');
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        };
+
+        // --- VIEWS ---
+        const container = document.getElementById('app-container');
+
+        window.renderHome = function() {
+            window.appState.plan = null;
+            window.appState.numParticipantes = 2;
+            window.appState.participantes = [];
+            window.appState.tipoReto = null;
+            
+            container.innerHTML = `
+                <div class="glass-panel rounded-2xl p-6 text-center animate-fade-in">
+                    <div class="mb-6">
+                        <div class="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 px-4 py-2 rounded-full mb-3">
+                            <i class="fas fa-fire text-gold fire-icon"></i>
+                            <span class="text-gold font-bold text-sm uppercase">Reto 30 Días</span>
+                        </div>
+                        <h2 class="font-heading text-2xl mb-2 text-white uppercase tracking-wide">Nuevo Reto INFIT</h2>
+                        <p class="text-gray-400 text-sm">Reta a tus amigos. ¡Que gane el mejor!</p>
+                    </div>
+
+                    <div class="bg-black/30 rounded-xl p-4 mb-4">
+                        <h4 class="text-gold text-sm font-bold mb-3 flex items-center justify-center">
+                            <i class="fas fa-users mr-2"></i> Participantes
+                        </h4>
+                        <div class="grid grid-cols-3 gap-2">
+                            <button onclick="selectParticipants(2)" class="participant-card border-2 border-white/20 rounded-xl p-3 text-center hover:border-gold transition-all" id="btn-part-2">
+                                <span class="text-2xl font-bold text-white">2</span>
+                                <p class="text-[10px] text-gray-400 mt-1">10% desc.</p>
+                            </button>
+                            <button onclick="selectParticipants(3)" class="participant-card border-2 border-white/20 rounded-xl p-3 text-center hover:border-gold transition-all" id="btn-part-3">
+                                <span class="text-2xl font-bold text-white">3</span>
+                                <p class="text-[10px] text-gray-400 mt-1">15% desc.</p>
+                            </button>
+                            <button onclick="selectParticipants(4)" class="participant-card border-2 border-white/20 rounded-xl p-3 text-center hover:border-gold transition-all" id="btn-part-4">
+                                <span class="text-2xl font-bold text-white">4</span>
+                                <p class="text-[10px] text-gray-400 mt-1">20% desc.</p>
+                            </button>
+                        </div>
+                    </div>
+
+                    <button onclick="startChallenge()" class="btn-gold w-full py-4 rounded-xl shadow-lg font-heading tracking-wide text-lg">
+                        <i class="fas fa-flag-checkered mr-2"></i> INICIAR RETO
+                    </button>
+
+                    <div class="mt-4 pt-4 border-t border-white/10">
+                        <p class="text-[10px] text-gray-500">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Elige tu plan, reta y selecciona castigos o premio
+                        </p>
+                    </div>
+                </div>
+            `;
+            
+            // Seleccionar 2 por defecto
+            selectParticipants(2);
+        };
+
+        window.selectParticipants = function(num) {
+            window.appState.numParticipantes = num;
+            
+            for (let i = 2; i <= 4; i++) {
+                const btn = document.getElementById(`btn-part-${i}`);
+                if (btn) {
+                    if (i === num) {
+                        btn.classList.remove('border-white/20');
+                        btn.classList.add('border-gold', 'bg-gold/10');
+                    } else {
+                        btn.classList.remove('border-gold', 'bg-gold/10');
+                        btn.classList.add('border-white/20');
+                    }
+                }
+            }
+        };
+
+        window.startChallenge = function() {
+            window.renderPlanSelection();
+        };
+
+        window.selectPlanOption = function(planName) {
+            window.appState.plan = planName;
+            window.renderPlanSelection(); 
+        };
+
+        window.renderPlanSelection = function() {
+            const plan = window.appState.plan;
+            const num = window.appState.numParticipantes;
+            const descuento = window.descuentosPorParticipante[num];
+            
+            const pAli = window.prices.plan_alimentacion;
+            const pEnt = window.prices.plan_entrenamiento;
+            const pCom = window.prices.combo;
+
+            const getPriceWithDiscount = (base) => {
+                const descuentoMonto = Math.round(base * (descuento / 100));
+                return base - descuentoMonto;
+            };
+
+            const getPriceHtml = (base) => {
+                const finalPrice = getPriceWithDiscount(base);
+                return `<div class="text-right">
+                    <span class="block text-[10px] text-gray-400 line-through">Reg. $${base}</span>
+                    <span class="text-green-400 font-bold text-sm">$${finalPrice} <span class="text-[10px]">c/u</span></span>
+                    <span class="block text-[9px] text-gold">${descuento}% OFF (${num} pers.)</span>
+                </div>`;
+            };
+            
+            container.innerHTML = `
+                <div class="glass-panel rounded-2xl p-6 animate-fade-in">
+                    <button onclick="renderHome()" class="text-gray-400 mb-4 hover:text-white transition-colors"><i class="fas fa-arrow-left mr-2"></i> Volver</button>
+                    <h2 class="font-heading text-xl mb-4 text-white uppercase border-b border-white/10 pb-2">
+                        <i class="fas fa-clipboard-list text-gold mr-2"></i>Plan del Reto
+                    </h2>
+
+                    <div class="bg-gold/10 border border-gold/20 rounded-xl p-3 mb-4 text-center">
+                        <p class="text-xs text-gray-400">${num} participantes</p>
+                        <p class="text-gold font-bold text-sm">${num === 2 ? '1 Retador + 1 Retado' : `1 Retador + ${num - 1} Retados`}</p>
+                    </div>
+                    
+                    <div class="grid gap-3">
+                        <div onclick="selectPlanOption('Alimentación')" class="border ${plan === 'Alimentación' ? 'border-gold bg-gold/10' : 'border-white/10 bg-black'} rounded-xl p-4 flex justify-between items-center cursor-pointer hover:border-gold transition-all">
+                            <div class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 ${plan === 'Alimentación' ? 'border-gold bg-gold' : 'border-gray-500'} flex items-center justify-center mr-3 shrink-0">
+                                    ${plan === 'Alimentación' ? '<i class="fas fa-check text-black text-xs"></i>' : ''}
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold">Plan de Alimentación</span>
+                                    <p class="text-[10px] text-gray-400">Menús personalizados 30 días</p>
+                                </div>
+                            </div>
+                            ${getPriceHtml(pAli)}
+                        </div>
+
+                        <div onclick="selectPlanOption('Entrenamiento')" class="border ${plan === 'Entrenamiento' ? 'border-gold bg-gold/10' : 'border-white/10 bg-black'} rounded-xl p-4 flex justify-between items-center cursor-pointer hover:border-gold transition-all">
+                            <div class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 ${plan === 'Entrenamiento' ? 'border-gold bg-gold' : 'border-gray-500'} flex items-center justify-center mr-3 shrink-0">
+                                    ${plan === 'Entrenamiento' ? '<i class="fas fa-check text-black text-xs"></i>' : ''}
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold">Plan de Entrenamiento</span>
+                                    <p class="text-[10px] text-gray-400">Rutinas adaptadas a tu nivel</p>
+                                </div>
+                            </div>
+                            ${getPriceHtml(pEnt)}
+                        </div>
+
+                        <div onclick="selectPlanOption('Combo VIP')" class="border-2 ${plan === 'Combo VIP' ? 'border-gold bg-gold/20' : 'border-gold/40 bg-gold/5'} rounded-xl p-4 flex justify-between items-center cursor-pointer hover:border-gold transition-all relative overflow-hidden">
+                            <div class="absolute top-0 right-0 bg-gold text-black text-[8px] font-bold px-2 py-0.5 rounded-bl">MÁS POPULAR</div>
+                            <div class="flex items-center">
+                                <div class="w-5 h-5 rounded-full border-2 ${plan === 'Combo VIP' ? 'border-gold bg-gold' : 'border-gold/50'} flex items-center justify-center mr-3 shrink-0">
+                                    ${plan === 'Combo VIP' ? '<i class="fas fa-check text-black text-xs"></i>' : ''}
+                                </div>
+                                <div>
+                                    <span class="text-sm font-semibold text-gold">Combo VIP</span>
+                                    <p class="text-[10px] text-gray-400">Alimentación + Entrenamiento</p>
+                                </div>
+                            </div>
+                            ${getPriceHtml(pCom)}
+                        </div>
+                    </div>
+                    
+                    <button onclick="if(window.appState.plan) renderParticipantForms(); else Swal.fire({icon:'warning', title:'Selecciona un plan', background:'#1a1a1a', color:'#fff'})" class="btn-gold w-full py-3.5 rounded-xl mt-6 shadow-lg shadow-yellow-500/20 font-heading tracking-wide">
+                        Registrar Participantes <i class="fas fa-users ml-2"></i>
+                    </button>
+                </div>
+            `;
+        };
+
+        window.currentParticipantIndex = 0;
+
+        window.renderParticipantForms = function() {
+            window.appState.participantes = [];
+            window.currentParticipantIndex = 0;
+            renderSingleParticipantForm();
+        };
+
+        window.renderSingleParticipantForm = function() {
+            const idx = window.currentParticipantIndex;
+            const num = window.appState.numParticipantes;
+            const existing = window.appState.participantes[idx] || { nombre: '', genero: 'M', peso: '', estatura: '', foto: null };
+            
+            const titulo = idx === 0 ? 'Retador' : `Retado ${idx}`;
+            const subtitulo = idx === 0 ? '(Quien crea el reto)' : '(Participante retado)';
+            
+            container.innerHTML = `
+                <div class="glass-panel rounded-2xl p-6 animate-fade-in">
+                    <div class="flex items-center justify-between mb-4">
+                        <button onclick="goBackParticipant()" class="text-gray-400 hover:text-white ${idx === 0 ? 'invisible' : ''}">
+                            <i class="fas fa-arrow-left mr-2"></i> Anterior
+                        </button>
+                        <span class="text-gold text-sm font-bold">${idx + 1} de ${num}</span>
+                    </div>
+                    
+                    <h2 class="font-heading text-xl mb-1 text-white uppercase border-b border-white/10 pb-2">
+                        <i class="fas fa-user text-gold mr-2"></i>${titulo}
+                    </h2>
+                    <p class="text-xs text-gray-400 mb-4">${subtitulo}</p>
+                    
+                    <div class="space-y-4">
+                        <div class="bg-black/50 p-4 rounded-xl border border-white/10 flex items-center gap-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-20 h-20 rounded-full border-2 border-gold overflow-hidden bg-black-light flex items-center justify-center">
+                                    <img id="preview-part" class="${existing.foto ? '' : 'hidden'} w-full h-full object-cover" src="${existing.foto || ''}">
+                                    <div id="placeholder-part" class="${existing.foto ? 'hidden' : ''} text-center">
+                                        <i class="fas fa-camera text-gray-500 text-xl mb-1"></i>
+                                        <p class="text-[8px] text-gray-500">Foto</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex-1">
+                                <label class="text-xs text-gold font-bold uppercase tracking-wider block mb-1">
+                                    <i class="fas fa-camera mr-1"></i> Avatar
+                                </label>
+                                <input type="file" id="part-foto-input" accept="image/*" class="w-full text-xs text-gray-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-bold file:bg-gold file:text-black hover:file:bg-gold-light cursor-pointer" onchange="previewImage(this, 'preview-part'); document.getElementById('placeholder-part').classList.add('hidden')">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase tracking-wider">Nombre</label>
+                            <input type="text" id="part-nombre" class="w-full input-infit rounded-lg p-3 mt-1" placeholder="Ej. Juan Pérez" value="${existing.nombre}">
+                        </div>
+                        
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase tracking-wider">Género</label>
+                            <select id="part-genero" class="w-full input-infit rounded-lg p-3 mt-1">
+                                <option value="M" ${existing.genero === 'M' ? 'selected' : ''}>👨 Hombre</option>
+                                <option value="F" ${existing.genero === 'F' ? 'selected' : ''}>👩 Mujer</option>
+                            </select>
+                        </div>
+                        
+                        <div class="grid grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs text-gray-400 uppercase tracking-wider">Peso (kg)</label>
+                                <input type="number" id="part-peso" class="w-full input-infit rounded-lg p-3 mt-1" placeholder="75" value="${existing.peso}">
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-400 uppercase tracking-wider">Estatura (cm)</label>
+                                <input type="number" id="part-estatura" class="w-full input-infit rounded-lg p-3 mt-1" placeholder="170" value="${existing.estatura}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="saveParticipantAndNext()" class="btn-gold w-full py-3.5 rounded-xl mt-6 shadow-lg font-heading tracking-wide">
+                        ${idx < num - 1 ? 'Siguiente Participante' : 'Elegir Tipo de Reto'} <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            `;
+        };
+
+        window.goBackParticipant = function() {
+            if (window.currentParticipantIndex > 0) {
+                saveCurrentParticipant();
+                window.currentParticipantIndex--;
+                renderSingleParticipantForm();
+            } else {
+                window.renderPlanSelection();
+            }
+        };
+
+        window.saveCurrentParticipant = function() {
+            const idx = window.currentParticipantIndex;
+            const nombre = document.getElementById('part-nombre')?.value || '';
+            const genero = document.getElementById('part-genero')?.value || 'M';
+            const peso = document.getElementById('part-peso')?.value || '';
+            const estatura = document.getElementById('part-estatura')?.value || '';
+            
+            const imgPreview = document.getElementById('preview-part');
+            let fotoBase64 = null;
+            if (imgPreview && !imgPreview.classList.contains('hidden') && imgPreview.src) {
+                fotoBase64 = imgPreview.src;
+            }
+
+            window.appState.participantes[idx] = { 
+                nombre, 
+                genero, 
+                peso, 
+                estatura, 
+                foto: fotoBase64,
+                rol: idx === 0 ? 'retador' : 'retado'
+            };
+        };
+
+        window.saveParticipantAndNext = function() {
+            const nombre = document.getElementById('part-nombre')?.value || '';
+            const peso = document.getElementById('part-peso')?.value || '';
+            const estatura = document.getElementById('part-estatura')?.value || '';
+            
+            if(!nombre || !peso || !estatura) {
+                Swal.fire({icon: 'error', title: 'Faltan datos', text: 'Por favor completa todos los campos.', background: '#1a1a1a', color: '#fff'});
+                return;
+            }
+
+            saveCurrentParticipant();
+            
+            const num = window.appState.numParticipantes;
+            if (window.currentParticipantIndex < num - 1) {
+                window.currentParticipantIndex++;
+                renderSingleParticipantForm();
+            } else {
+                // Calcular metas para todos
+                const plan = window.appState.plan;
+                window.appState.metas = window.appState.participantes.map(p => 
+                    calculateGoal(p.peso, p.estatura, plan)
+                );
+                window.renderTipoRetoSelection();
+            }
+        };
+
+        // --- SELECCIÓN DE TIPO DE RETO ---
+        window.renderTipoRetoSelection = function() {
+            const num = window.appState.numParticipantes;
+            const retador = window.appState.participantes[0];
+            
+            container.innerHTML = `
+                <div class="glass-panel rounded-2xl p-6 animate-fade-in">
+                    <button onclick="goBackParticipant()" class="text-gray-400 mb-4 hover:text-white"><i class="fas fa-arrow-left mr-2"></i> Volver</button>
+                    <h2 class="font-heading text-xl mb-2 text-white uppercase border-b border-white/10 pb-2">
+                        <i class="fas fa-trophy text-gold mr-2"></i>Tipo de Reto
+                    </h2>
+                    <p class="text-xs text-gray-400 mb-4">${retador.nombre}, elige qué tipo de reto será:</p>
+
+                    <div class="space-y-3">
+                        <div onclick="selectTipoReto('castigo')" class="tipo-card border border-white/20 rounded-xl p-4 cursor-pointer" id="tipo-castigo">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-red-500/20 flex items-center justify-center">
+                                    <i class="fas fa-fire-flame-curved text-red-400 text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-white">Con Castigo</h4>
+                                    <p class="text-xs text-gray-400">El perdedor cumple un castigo</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div onclick="selectTipoReto('premio')" class="tipo-card border border-white/20 rounded-xl p-4 cursor-pointer" id="tipo-premio">
+                            <div class="flex items-center gap-3">
+                                <div class="w-12 h-12 rounded-full bg-gold/20 flex items-center justify-center">
+                                    <i class="fas fa-trophy text-gold text-xl"></i>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="font-bold text-white">Con Premio</h4>
+                                    <p class="text-xs text-gray-400">Cada quien aporta y el ganador se lleva todo</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="premio-config" class="hidden mt-4">
+                        <label class="text-xs text-gray-400 uppercase tracking-wider">Aporte por persona ($MXN)</label>
+                        <div class="flex items-center gap-2 mt-2">
+                            <span class="text-gold font-bold text-lg">$</span>
+                            <input type="number" id="premio-cantidad" class="flex-1 input-infit rounded-lg p-3 text-gold text-center font-bold text-lg" value="200" min="50">
+                            <span class="text-gray-400 text-sm">MXN</span>
+                        </div>
+                        <p class="text-xs text-center text-gold mt-2">
+                            <i class="fas fa-trophy mr-1"></i>
+                            Premio acumulado: <span id="premio-total" class="font-bold">$${num * 200} MXN</span>
+                        </p>
+                    </div>
+                    
+                    <button onclick="proceedToCastigoOrFinal()" id="btn-continue-tipo" class="btn-gold w-full py-3.5 rounded-xl mt-6 shadow-lg font-heading tracking-wide hidden">
+                        Continuar <i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            `;
+        };
+
+        window.selectTipoReto = function(tipo) {
+            window.appState.tipoReto = tipo;
+            
+            // Actualizar UI
+            document.getElementById('tipo-castigo').classList.remove('selected', 'border-gold', 'bg-gold/10');
+            document.getElementById('tipo-premio').classList.remove('selected', 'border-gold', 'bg-gold/10');
+            
+            if (tipo === 'castigo') {
+                document.getElementById('tipo-castigo').classList.add('selected', 'border-gold', 'bg-gold/10');
+                document.getElementById('premio-config').classList.add('hidden');
+            } else {
+                document.getElementById('tipo-premio').classList.add('selected', 'border-gold', 'bg-gold/10');
+                document.getElementById('premio-config').classList.remove('hidden');
+            }
+            
+            document.getElementById('btn-continue-tipo').classList.remove('hidden');
+        };
+
+        // Event listener para actualizar premio total
+        document.addEventListener('input', function(e) {
+            if (e.target.id === 'premio-cantidad') {
+                const cantidad = parseInt(e.target.value) || 200;
+                const num = window.appState.numParticipantes;
+                const total = cantidad * num;
+                document.getElementById('premio-total').textContent = `$${total} MXN`;
+            }
+        });
+
+        window.proceedToCastigoOrFinal = function() {
+            if (window.appState.tipoReto === 'castigo') {
+                window.renderStakesForm();
+            } else {
+                // Guardar premio y mostrar pantalla final
+                const cantidad = parseInt(document.getElementById('premio-cantidad')?.value) || 200;
+                window.appState.premio.cantidad = cantidad;
+                window.renderVSScreen();
+            }
+        };
+
+        window.renderStakesForm = function() {
+            let categoriesHtml = '';
+            for (const [key, cat] of Object.entries(window.punishmentCategories)) {
+                categoriesHtml += `
+                    <div onclick="selectCategory('${key}')" class="category-card border ${cat.border} ${cat.bg} rounded-xl p-3 flex items-center gap-3" data-category="${key}">
+                        <div class="w-10 h-10 rounded-full bg-black/50 flex items-center justify-center">
+                            <i class="fas ${cat.icon} ${cat.color} text-lg"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-white text-sm">${cat.name}</h4>
+                            <p class="text-[10px] text-gray-400">${cat.punishments.length} castigos</p>
+                        </div>
+                    </div>
+                `;
+            }
+
+            let participantesHtml = window.appState.participantes.map((p, i) => `
+                <div class="bg-black/30 p-2 rounded-lg ${i === 0 ? 'border border-gold/20' : ''}">
+                    <p class="text-gold text-[10px] mb-1">🎯 ${p.nombre} ${i === 0 ? '(Retador)' : '(Retado)'}</p>
+                    <p class="text-white text-[10px]">${window.appState.metas[i]}</p>
+                </div>
+            `).join('');
+
+            container.innerHTML = `
+                <div class="glass-panel rounded-2xl p-6 animate-fade-in">
+                    <button onclick="renderTipoRetoSelection()" class="text-gray-400 mb-4 hover:text-white"><i class="fas fa-arrow-left mr-2"></i> Volver</button>
+                    <h2 class="font-heading text-xl mb-2 text-white uppercase border-b border-white/10 pb-2">
+                        <i class="fas fa-fire text-red-500 mr-2"></i>Castigo para el Perdedor
+                    </h2>
+                    
+                    <div class="bg-black-light border border-gold/30 rounded-xl p-4 mb-4">
+                        <h3 class="text-gold text-sm font-bold uppercase mb-3 flex items-center">
+                            <i class="fas fa-bullseye mr-2"></i>Metas (${window.appState.plan})
+                        </h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs">
+                            ${participantesHtml}
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-gray-400 mb-3">Selecciona el castigo para el perdedor:</p>
+                    <div class="grid grid-cols-2 gap-2 mb-4" id="categories-container">
+                        ${categoriesHtml}
+                    </div>
+
+                    <div id="punishments-container" class="hidden">
+                        <div class="border-t border-white/10 pt-4 mt-4">
+                            <p class="text-xs text-gray-400 mb-3">Selecciona el castigo:</p>
+                            <div id="punishments-list" class="space-y-2"></div>
+                        </div>
+                    </div>
+
+                    <div id="custom-container" class="mt-4 hidden">
+                        <label class="text-xs text-gray-400 uppercase tracking-wider">Escribe tu propio castigo:</label>
+                        <textarea id="castigo-custom" class="w-full input-infit rounded-lg p-3 mt-1 text-sm h-20" placeholder="Ej. El perdedor tiene que correr 5km vestido de superhéroe..."></textarea>
+                    </div>
+                    
+                    <button onclick="finalizeChallenge()" id="finalize-btn" class="btn-gold w-full py-4 rounded-xl mt-6 shadow-lg shadow-yellow-500/30 text-lg font-heading tracking-wide hidden">
+                        <i class="fas fa-bolt mr-2"></i> CREAR RETO
+                    </button>
+                </div>
+            `;
+        };
+
+        window.selectCategory = function(categoryKey) {
+            document.querySelectorAll('.category-card').forEach(card => {
+                card.classList.remove('selected');
+            });
+            document.querySelector(`[data-category="${categoryKey}"]`).classList.add('selected');
+            
+            const cat = window.punishmentCategories[categoryKey];
+            window.appState.castigo.categoria = categoryKey;
+            
+            let punishmentsHtml = cat.punishments.map((p, i) => `
+                <div onclick="selectPunishment(${i})" class="punishment-option border border-white/10 rounded-lg p-3 flex items-start gap-3" data-punishment="${i}">
+                    <div class="w-6 h-6 rounded-full border-2 border-gray-500 flex items-center justify-center mt-0.5 shrink-0">
+                    </div>
+                    <p class="text-sm text-gray-300">${p}</p>
+                </div>
+            `).join('');
+
+            punishmentsHtml += `
+                <div onclick="selectPunishment('custom')" class="punishment-option border border-dashed border-gold/30 rounded-lg p-3 flex items-center gap-3" data-punishment="custom">
+                    <div class="w-6 h-6 rounded-full border-2 border-gold/50 flex items-center justify-center shrink-0">
+                        <i class="fas fa-plus text-gold text-xs"></i>
+                    </div>
+                    <p class="text-sm text-gold">Escribir mi propio castigo...</p>
+                </div>
+            `;
+
+            document.getElementById('punishments-list').innerHTML = punishmentsHtml;
+            document.getElementById('punishments-container').classList.remove('hidden');
+            document.getElementById('finalize-btn').classList.add('hidden');
+            document.getElementById('custom-container').classList.add('hidden');
+        };
+
+        window.selectPunishment = function(index) {
+            document.querySelectorAll('.punishment-option').forEach(opt => {
+                opt.classList.remove('selected');
+                const circle = opt.querySelector('.w-6');
+                if (circle) {
+                    circle.innerHTML = '';
+                    circle.classList.remove('border-gold', 'bg-gold');
+                    circle.classList.add('border-gray-500');
+                }
+            });
+
+            if (index === 'custom') {
+                document.getElementById('custom-container').classList.remove('hidden');
+                document.getElementById('finalize-btn').classList.remove('hidden');
+                window.appState.castigo.descripcion = '';
+            } else {
+                document.getElementById('custom-container').classList.add('hidden');
+                
+                const cat = window.punishmentCategories[window.appState.castigo.categoria];
+                const punishment = cat.punishments[index];
+                
+                const options = document.querySelectorAll('.punishment-option');
+                if (options[index]) {
+                    options[index].classList.add('selected');
+                    const circle = options[index].querySelector('.w-6');
+                    if (circle) {
+                        circle.classList.remove('border-gray-500');
+                        circle.classList.add('border-gold', 'bg-gold');
+                        circle.innerHTML = '<i class="fas fa-check text-black text-xs"></i>';
+                    }
+                }
+
+                window.appState.castigo.descripcion = punishment;
+                document.getElementById('finalize-btn').classList.remove('hidden');
+            }
+        };
+
+        window.finalizeChallenge = async function() {
+            let castigoDesc = window.appState.castigo.descripcion;
+            
+            const customContainer = document.getElementById('custom-container');
+            const customTextarea = document.getElementById('castigo-custom');
+            
+            if (!castigoDesc || (customContainer && !customContainer.classList.contains('hidden'))) {
+                if (customTextarea && customTextarea.value) {
+                    castigoDesc = customTextarea.value;
+                }
+            }
+            
+            if(!castigoDesc) {
+                Swal.fire({icon: 'warning', title: '¡Define el castigo!', text: 'Selecciona o escribe un castigo para el perdedor.', background: '#1a1a1a', color: '#fff'});
+                return;
+            }
+            
+            window.appState.castigo.descripcion = castigoDesc;
+
+            Swal.fire({
+                title: 'Forjando el Reto...',
+                html: '<p class="text-gray-400">Preparando tu desafío épico</p>',
+                background: '#1a1a1a',
+                color: '#D4AF37',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            try {
+                if (db && currentUser) {
+                    const appId = typeof __app_id !== 'undefined' ? __app_id : 'infit-local';
+                    const retosRef = collection(db, 'artifacts', appId, 'public', 'data', 'retos_mx');
+                    await addDoc(retosRef, {
+                        ...window.appState,
+                        creadoEn: serverTimestamp(),
+                        userId: currentUser.uid,
+                        estado: 'pendiente'
+                    });
+                }
+            } catch (error) {
+                console.error("Error guardando en Firebase:", error);
+            }
+
+            Swal.close();
+            window.renderVSScreen();
+        };
+
+        window.renderVSScreen = function() {
+            const participantes = window.appState.participantes;
+            const num = window.appState.numParticipantes;
+            const tipoReto = window.appState.tipoReto;
+
+            // Generar avatares
+            const avatares = participantes.map((p) => p.foto || getAvatarFallbackCanvas(p.nombre));
+
+            // Crear grid de participantes
+            let participantesHtml = '';
+            
+            if (num === 2) {
+                participantesHtml = `
+                    <div class="flex items-center justify-between">
+                        <div class="text-center flex-1">
+                            <div class="w-20 h-20 mx-auto rounded-full border-3 border-gold overflow-hidden bg-black-light mb-2 shadow-lg shadow-gold/20">
+                                <img src="${avatares[0]}" class="w-full h-full object-cover">
+                            </div>
+                            <p class="text-white font-bold text-sm truncate px-2">${participantes[0].nombre}</p>
+                            <p class="text-gold text-[10px] uppercase">Retador</p>
+                        </div>
+                        <div class="mx-2">
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-gold to-gold-dark flex items-center justify-center shadow-lg animate-pulse-gold">
+                                <span class="vs-text font-heading text-lg font-bold">VS</span>
+                            </div>
+                        </div>
+                        <div class="text-center flex-1">
+                            <div class="w-20 h-20 mx-auto rounded-full border-3 border-white overflow-hidden bg-black-light mb-2 shadow-lg shadow-white/20">
+                                <img src="${avatares[1]}" class="w-full h-full object-cover">
+                            </div>
+                            <p class="text-white font-bold text-sm truncate px-2">${participantes[1].nombre}</p>
+                            <p class="text-white/70 text-[10px] uppercase">Retado</p>
+                        </div>
+                    </div>
+                `;
+            } else if (num === 3) {
+                participantesHtml = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-center gap-4">
+                            <div class="text-center">
+                                <div class="w-16 h-16 mx-auto rounded-full border-2 border-gold overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[0]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-xs truncate">${participantes[0].nombre}</p>
+                                <p class="text-gold text-[9px] uppercase">Retador</p>
+                            </div>
+                            <div class="w-10 h-10 rounded-full bg-gold/20 flex items-center justify-center">
+                                <span class="vs-text font-heading text-sm font-bold">VS</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-16 h-16 mx-auto rounded-full border-2 border-white/50 overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[1]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-xs truncate">${participantes[1].nombre}</p>
+                                <p class="text-white/60 text-[9px] uppercase">Retado</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <span class="text-gold text-sm">⚔️</span>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="text-center">
+                                <div class="w-16 h-16 mx-auto rounded-full border-2 border-white/50 overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[2]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-xs truncate">${participantes[2].nombre}</p>
+                                <p class="text-white/60 text-[9px] uppercase">Retado</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if (num === 4) {
+                participantesHtml = `
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="text-center">
+                                <div class="w-14 h-14 mx-auto rounded-full border-2 border-gold overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[0]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-[11px] truncate">${participantes[0].nombre}</p>
+                                <p class="text-gold text-[8px] uppercase">Retador</p>
+                            </div>
+                            <div class="w-8 h-8 rounded-full bg-gold/20 flex items-center justify-center">
+                                <span class="vs-text font-heading text-xs font-bold">VS</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 mx-auto rounded-full border-2 border-white/50 overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[1]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-[11px] truncate">${participantes[1].nombre}</p>
+                                <p class="text-white/60 text-[8px] uppercase">Retado</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-center gap-3">
+                            <div class="text-center">
+                                <div class="w-14 h-14 mx-auto rounded-full border-2 border-white/50 overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[2]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-[11px] truncate">${participantes[2].nombre}</p>
+                                <p class="text-white/60 text-[8px] uppercase">Retado</p>
+                            </div>
+                            <div class="w-8 h-8 flex items-center justify-center">
+                                <span class="text-gold">⚔️</span>
+                            </div>
+                            <div class="text-center">
+                                <div class="w-14 h-14 mx-auto rounded-full border-2 border-white/50 overflow-hidden bg-black-light mb-1">
+                                    <img src="${avatares[3]}" class="w-full h-full object-cover">
+                                </div>
+                                <p class="text-white font-bold text-[11px] truncate">${participantes[3].nombre}</p>
+                                <p class="text-white/60 text-[8px] uppercase">Retado</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+
+            // Sección de premio o castigo
+            let retoSectionHtml = '';
+            if (tipoReto === 'premio') {
+                const premioTotal = window.appState.premio.cantidad * num;
+                retoSectionHtml = `
+                    <div class="px-4 py-3 border-t border-white/10 bg-gradient-to-r from-gold/20 to-gold/10">
+                        <h4 class="text-gold text-xs font-bold uppercase mb-2 flex items-center justify-center">
+                            <i class="fas fa-trophy mr-1"></i> Premio para el Ganador
+                        </h4>
+                        <p class="pot-display text-3xl font-bold text-center">$${premioTotal} MXN</p>
+                        <p class="text-[10px] text-gray-400 text-center mt-1">Acumulado: ${num} participantes × $${window.appState.premio.cantidad}</p>
+                    </div>
+                `;
+            } else {
+                retoSectionHtml = `
+                    <div class="px-4 py-3 border-t border-white/10 bg-red-900/20">
+                        <h4 class="text-red-400 text-xs font-bold uppercase mb-2 flex items-center justify-center">
+                            <i class="fas fa-fire-flame-curved mr-1"></i> Castigo para el Perdedor
+                        </h4>
+                        <p class="text-white text-sm text-center">${window.appState.castigo.descripcion}</p>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div id="vs-card" class="glass-panel rounded-2xl overflow-hidden animate-fade-in">
+                    <div class="bg-gradient-to-r from-gold/20 via-gold/10 to-transparent p-4 text-center border-b border-gold/20">
+                        <div class="inline-flex items-center gap-2 bg-gold/10 border border-gold/30 px-3 py-1 rounded-full mb-2">
+                            <i class="fas fa-fire text-gold text-xs"></i>
+                            <span class="text-gold font-bold text-xs uppercase">¡Reto Creado!</span>
+                        </div>
+                        <h2 class="font-heading text-lg text-white uppercase tracking-wide">${window.appState.plan}</h2>
+                        <p class="text-xs text-gray-400">30 Días de Transformación</p>
+                    </div>
+
+                    <div class="p-4 bg-black/30">
+                        ${participantesHtml}
+                    </div>
+
+                    <div class="px-4 py-3 border-t border-white/10 bg-black/20">
+                        <h4 class="text-gold text-xs font-bold uppercase mb-2 flex items-center justify-center">
+                            <i class="fas fa-bullseye mr-1"></i> Metas (${window.appState.plan})
+                        </h4>
+                        <div class="grid grid-cols-2 gap-2 text-[10px]">
+                            ${participantes.map((p, i) => `
+                                <div class="bg-black/30 p-2 rounded-lg text-center ${i === 0 ? 'border border-gold/20' : ''}">
+                                    <p class="text-gold truncate">${p.nombre} ${i === 0 ? '(R)' : ''}</p>
+                                    <p class="text-white">${window.appState.metas[i]}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+
+                    ${retoSectionHtml}
+
+                    <div class="px-4 py-3 bg-black/30 text-center border-t border-white/10">
+                        <p class="text-gray-400 text-[10px]">Inicio: ${new Date().toLocaleDateString('es-MX', {day: 'numeric', month: 'short', year: 'numeric'})}</p>
+                        <p class="text-gold text-xs font-bold">Finaliza en 30 días</p>
+                    </div>
+
+                    <div class="p-4 space-y-2">
+                        <button onclick="shareToWhatsApp()" class="w-full bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl flex items-center justify-center gap-2 transition-all font-bold">
+                            <i class="fab fa-whatsapp text-xl"></i> Compartir por WhatsApp
+                        </button>
+                        <button onclick="downloadImage()" class="w-full bg-gold/10 hover:bg-gold/20 border border-gold/30 text-gold py-3 rounded-xl flex items-center justify-center gap-2 transition-all font-bold">
+                            <i class="fas fa-download"></i> Descargar Imagen
+                        </button>
+                        <button onclick="renderHome()" class="w-full text-gray-400 hover:text-white py-2 text-sm transition-colors">
+                            <i class="fas fa-plus mr-1"></i> Crear otro reto
+                        </button>
+                    </div>
+                </div>
+            `;
+        };
+
+        window.shareToWhatsApp = function() {
+            const participantes = window.appState.participantes;
+            const num = window.appState.numParticipantes;
+            const tipoReto = window.appState.tipoReto;
+            
+            let retoTexto = '';
+            if (tipoReto === 'premio') {
+                const premioTotal = window.appState.premio.cantidad * num;
+                retoTexto = `💰 Premio: $${premioTotal} MXN (${num} × $${window.appState.premio.cantidad})`;
+            } else {
+                retoTexto = `💀 Castigo: ${window.appState.castigo.descripcion}`;
+            }
+            
+            const retador = participantes[0];
+            const retados = participantes.slice(1).map(p => p.nombre).join(', ');
+            
+            const mensaje = `🔥 *¡RETO INFIT CREADO!* 🔥
+
+📋 Plan: ${window.appState.plan}
+👤 Retador: ${retador.nombre}
+🎯 Retados: ${retados}
+
+🏁 Metas:
+${participantes.map((p, i) => `• ${p.nombre}: ${window.appState.metas[i]}`).join('\n')}
+
+${retoTexto}
+
+⏰ ¡30 días para demostrar quién es el mejor!
+💪 *Tu Mejor Versión - INFIT*`;
+
+            const url = `https://wa.me/?text=${encodeURIComponent(mensaje)}`;
+            window.open(url, '_blank');
+        };
+
+        window.downloadImage = async function() {
+            const card = document.getElementById('vs-card');
+            if (!card) return;
+            
+            Swal.fire({
+                title: 'Generando imagen...',
+                background: '#1a1a1a',
+                color: '#fff',
+                allowOutsideClick: false,
+                didOpen: () => { Swal.showLoading(); }
+            });
+
+            try {
+                const canvas = await html2canvas(card, {
+                    backgroundColor: '#0A0A0A',
+                    scale: 2,
+                    useCORS: true
+                });
+                
+                const link = document.createElement('a');
+                const nombres = window.appState.participantes.map(p => p.nombre).join('_');
+                link.download = `INFIT_Reto_${nombres}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                Swal.fire({
+                    icon: 'success',
+                    title: '¡Imagen descargada!',
+                    background: '#1a1a1a',
+                    color: '#fff',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            } catch (error) {
+                console.error('Error generando imagen:', error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error al generar imagen',
+                    background: '#1a1a1a',
+                    color: '#fff'
+                });
+            }
+        };
+
+        window.openAdmin = function() {
+            Swal.fire({
+                title: 'Panel de Administrador',
+                html: `
+                    <input type="password" id="admin-password" class="swal2-input" placeholder="Contraseña" style="background:#1a1a1a;color:#fff;border:1px solid #D4AF37;">
+                `,
+                background: '#1a1a1a',
+                color: '#fff',
+                confirmButtonText: 'Acceder',
+                confirmButtonColor: '#D4AF37',
+                showCancelButton: true,
+                cancelButtonText: 'Cancelar',
+                preConfirm: () => {
+                    const pass = document.getElementById('admin-password').value;
+                    if (pass === 'INFIT2026PRO') {
+                        return true;
+                    } else {
+                        Swal.showValidationMessage('Contraseña incorrecta');
+                        return false;
+                    }
+                }
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.renderAdminPanel();
+                }
+            });
+        };
+
+        window.renderAdminPanel = function() {
+            container.innerHTML = `
+                <div class="glass-panel rounded-2xl p-6 animate-fade-in">
+                    <button onclick="renderHome()" class="text-gray-400 mb-4 hover:text-white"><i class="fas fa-arrow-left mr-2"></i> Volver</button>
+                    <h2 class="font-heading text-xl mb-4 text-white uppercase border-b border-white/10 pb-2">
+                        <i class="fas fa-cog text-gold mr-2"></i>Panel Admin
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase">Plan Alimentación ($MXN)</label>
+                            <input type="number" id="admin-plan-ali" class="w-full input-infit rounded-lg p-3 mt-1" value="${window.prices.plan_alimentacion}">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase">Plan Entrenamiento ($MXN)</label>
+                            <input type="number" id="admin-plan-ent" class="w-full input-infit rounded-lg p-3 mt-1" value="${window.prices.plan_entrenamiento}">
+                        </div>
+                        <div>
+                            <label class="text-xs text-gray-400 uppercase">Combo VIP ($MXN)</label>
+                            <input type="number" id="admin-combo" class="w-full input-infit rounded-lg p-3 mt-1" value="${window.prices.combo}">
+                        </div>
+                    </div>
+
+                    <div class="mt-6 pt-4 border-t border-white/10">
+                        <p class="text-xs text-gray-400 mb-3">Descuentos por participantes (%)</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div>
+                                <label class="text-[10px] text-gray-500">2 pers.</label>
+                                <input type="number" id="admin-desc-2" class="w-full input-infit rounded-lg p-2 mt-1 text-sm text-center" value="${window.descuentosPorParticipante[2]}">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-gray-500">3 pers.</label>
+                                <input type="number" id="admin-desc-3" class="w-full input-infit rounded-lg p-2 mt-1 text-sm text-center" value="${window.descuentosPorParticipante[3]}">
+                            </div>
+                            <div>
+                                <label class="text-[10px] text-gray-500">4 pers.</label>
+                                <input type="number" id="admin-desc-4" class="w-full input-infit rounded-lg p-2 mt-1 text-sm text-center" value="${window.descuentosPorParticipante[4]}">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button onclick="saveAdminSettings()" class="btn-gold w-full py-3 rounded-xl mt-6 font-heading">
+                        Guardar Cambios
+                    </button>
+                </div>
+            `;
+        };
+
+        window.saveAdminSettings = function() {
+            window.prices = {
+                plan_alimentacion: parseInt(document.getElementById('admin-plan-ali').value) || 600,
+                plan_entrenamiento: parseInt(document.getElementById('admin-plan-ent').value) || 600,
+                combo: parseInt(document.getElementById('admin-combo').value) || 1000,
+                descuento_2: parseInt(document.getElementById('admin-desc-2').value) || 10,
+                descuento_3: parseInt(document.getElementById('admin-desc-3').value) || 15,
+                descuento_4: parseInt(document.getElementById('admin-desc-4').value) || 20
+            };
+            
+            window.descuentosPorParticipante = {
+                2: window.prices.descuento_2,
+                3: window.prices.descuento_3,
+                4: window.prices.descuento_4
+            };
+            
+            localStorage.setItem('infit_prices_mx', JSON.stringify(window.prices));
+            
+            Swal.fire({
+                icon: 'success',
+                title: '¡Guardado!',
+                text: 'Los precios se actualizaron correctamente.',
+                background: '#1a1a1a',
+                color: '#fff',
+                timer: 1500,
+                showConfirmButton: false
+            });
+        };
+
+        // --- INIT ---
+        initFirebase();
+        window.renderHome();
+    </script>
+</body>
+</html>
